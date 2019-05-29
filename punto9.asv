@@ -1,0 +1,11 @@
+function [Z2] = punto9(a,b,ciy,cix,xi)
+syms  Z1 n;
+Hz=FdeTransferenciaDis(a,b,ciy,cix,xi);
+Z2= iztrans(Hz);
+
+
+tiempo=0:1:10;
+stem(tiempo,subs(Z2,n,tiempo),'b','LineWidth',2)
+title('Respuesta al Impulso ','FontWeight','bold','FontSize',16)
+grid on
+end

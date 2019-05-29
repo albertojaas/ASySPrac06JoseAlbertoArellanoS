@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Pr&aacute;ctica 5: Series de Fourier en tiempo continuo</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-05-14"><meta name="DC.source" content="p05.m"><style type="text/css">
+      --><title>Pr&aacute;ctica 6:  Sistemas diferenciales y en diferencias</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-05-28"><meta name="DC.source" content="P06.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,217 +66,468 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Pr&aacute;ctica 5: Series de Fourier en tiempo continuo</h1><!--introduction--><p>Arellano S&aacute;nches Jos&eacute; Alberto</p><p>L&oacute;pez Piedracruz Marcos Antonio</p><p>Luviano Murakawa Tsuioshi Alberto</p><p>Robles Cernas Carlos de Jesus</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Introducci&oacute;n</a></li><li><a href="#2">Ejercicio 1</a></li><li><a href="#4">Ejercicio 2</a></li><li><a href="#5">Ejercicio 3</a></li><li><a href="#7">Ejercicio 4</a></li><li><a href="#8">Ejercicio 5</a></li><li><a href="#9">Ejercicio 6</a></li><li><a href="#10">Ejercicio 7</a></li><li><a href="#11">&Aacute;pendice</a></li></ul></div><h2 id="1">Introducci&oacute;n</h2><p>Existen dos formas por las cuales podemos aproximar funciones, 'aproximacion discreta' y 'aproximacion continua'.</p><p>La aproximaci&oacute;n discreta y la interpolacion de funciones son conceptos cercanos pero en el primer polinomio no existe aproximaci&oacute;n o diferencia del segundo que la funcion aproximante verifique exactamente los datos discretoas del problema.</p><p>Para poder aproximar n&uacute;mericamente un resultado de una se&ntilde;al utilizamos la trasnformada de Fourire discreta. La cual utiliza muestras de una se&ntilde;al periodica x(t) en un periodo. Donde el periodo es de T segundos. Poe lo tanto existe <img src="p05_eq11446108733363934681.png" alt="$N_0=T_0/T$"> n&uacute;meros de muestra en el periodo. Para esto consideramos:</p><p><img vspace="5" hspace="5" src="imagen1.png" alt=""> </p><p>Donde <img src="p05_eq06905719444939904769.png" alt="$x(kT)$"> es una muestra de x(t)</p><p><img vspace="5" hspace="5" src="imagen2.png" alt=""> </p><p>En la practica es imposible hacer que <img src="p05_eq06575724432221810474.png" alt="$T--&gt;0$">. Pero podemos hacer T muy peque&ntilde;a pero no cero, lo que hace que los datos crezcan sin limite alguno. De esta forma podemos ignorar el limite de T. Al no tomar T en cero, esto generar&aacute; un error, el cual es inevitable en cualquier evaluacion numerica de la integral. A este error se le llama 'aliasing error' y se puede denotar como:</p><p><img vspace="5" hspace="5" src="imagen3.png" alt=""> </p><p>De <img src="p05_eq11195096705702301081.png" alt="$N_0\Omega_0=2\pi$"> . Asi, <img src="p05_eq10252587237104324676.png" alt="$e^j\Omega_0(k+N_0)=e^j/Omega_0k$"> por lo tanto queda como:</p><p><img vspace="5" hspace="5" src="imagen4.png" alt=""> </p><h2 id="2">Ejercicio 1</h2><pre class="codeinput">d0=0.504;
-dn=@(n) 0.504/(1+4*n*j);
-t0=0;
-tf=pi;
-f=@(t) exp(-t/2);
-armo=4;
-a=-7;
-b=7;
-sfc(t0,tf,dn,d0,f,armo,a,b)
-</pre><img vspace="5" hspace="5" src="p05_01.png" alt=""> <h2 id="4">Ejercicio 2</h2><pre class="codeinput">d0 = 0;
-A = 3;
-dn = @(n) -((8*A)/(n^2*pi^2)*sin((n*pi)/2))*j/2;
-t0 = -0.5;
-tf = 1.5;
-f = @(t) A*(2*t).*(t &gt; -.5 &amp; t &lt; .5) - A*(2*(t-1)).*(t &gt; .5 &amp; t &lt; 1.5);
-armo = 4;
-a = -1.5;
-b = 7;
-sfc(t0,tf,dn,d0,f,armo,a,b)
-</pre><img vspace="5" hspace="5" src="p05_02.png" alt=""> <h2 id="5">Ejercicio 3</h2><pre class="codeinput">d0 = 1/2;
-dn = @(n) (2/(n*pi)*sin(n*pi/2))/2;
-t0 = -pi/2;
-tf = pi/2;
-f = @(t) 1*(t &gt; -pi/2 &amp; t &lt; pi/2);
-armo = 4;
-a = -pi/2;
-b = 4*pi;
-sfc(t0,tf,dn,d0,f,armo,a,b)
-</pre><img vspace="5" hspace="5" src="p05_03.png" alt=""> <h2 id="7">Ejercicio 4</h2><h2 id="8">Ejercicio 5</h2><pre class="codeinput">T_0=3;
-w_0=(2*pi)/T_0;
-D_n=1/T_0;
-delta= @(t) D_n*(1+2*(cos(w_0*t)+cos(2*w_0*t)+cos(3*w_0*t)+cos(4*w_0*t)+cos(5*w_0*t)));
-n=linspace(0,4,29);
-figure
-stem(n,delta(n),<span class="string">'k'</span>);
-xlabel(<span class="string">'n'</span>);
-ylabel(<span class="string">'angulo'</span>);
-</pre><img vspace="5" hspace="5" src="p05_04.png" alt=""> <h2 id="9">Ejercicio 6</h2><h2 id="10">Ejercicio 7</h2><pre class="codeinput">Ejercicio6_4 = transpose(EjC6_4());
-Metodo_trapecio = transpose(trapecio());
-Diferencia = abs(Ejercicio6_4 - Metodo_trapecio);
-T4 = table(Ejercicio6_4,Metodo_trapecio)
-T5 = table(Diferencia)
-</pre><pre class="codeoutput">Warning: Using only the real component of complex data. 
+  </style></head><body><div class="content"><h1>Pr&aacute;ctica 6:  Sistemas diferenciales y en diferencias</h1><!--introduction--><p>Arellano Sanchez Jose Alberto</p><p>Lopez Piedracruz Marcos Antonio</p><p>Luviano Murakawa Tsuioshi Alberto</p><p>Robles Cernas Carlos de Jesus</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Punto 1</a></li><li><a href="#2">Punto 2</a></li><li><a href="#3">Punto 3</a></li><li><a href="#4">Punto 4</a></li><li><a href="#5">Punto 5</a></li><li><a href="#6">Punto 6</a></li><li><a href="#7">Punto 7</a></li><li><a href="#8">Punto 8</a></li><li><a href="#9">Punto 9</a></li><li><a href="#10">Punto 10</a></li><li><a href="#11">Punto 11</a></li><li><a href="#12">Punto 12</a></li><li><a href="#13">Punto 13</a></li><li><a href="#14">Punto 14</a></li></ul></div><h2 id="1">Punto 1</h2><pre class="language-matlab">
+<span class="keyword">function</span> [ Ft ] = Funciontransfer( a,b )
+<span class="comment">% a coeficientes de las derivadas de la salida menor a mayor [a_0, ..., a_n]</span>
+<span class="comment">% b coeficientes de las derivadas de la entrada menor a mayor [b_0, ..., b_m]</span>
 
-T4 =
+close <span class="string">all</span>
+tam=size(a);
+tami=size(b);
+syms <span class="string">y(t)</span> <span class="string">Y(s)</span> <span class="string">x(t)</span> <span class="string">X(s)</span> <span class="string">Yy</span> <span class="string">fp</span>;
+syms <span class="string">edd</span> <span class="string">edi</span> 
+edd=0;
+edi=0;
 
-  15&times;2 table
+<span class="keyword">for</span> i=1:tam(2)
+   edd=edd+a(i)*s^(i-1);
+<span class="keyword">end</span>
 
-         Ejercicio6_4           Metodo_trapecio  
-    ______________________    ___________________
+<span class="keyword">for</span> i=1:tami(2)
+   edi=edi+b(i)*s^(i-1);
+<span class="keyword">end</span>
+Ft = edi/edd
 
-        0.5044+0i                 0.504+0i       
-      0.029787-0.11816i         0.21855-0.24977i 
-     0.0078826-0.061076i        0.08097-0.18508i 
-     0.0036037-0.040244i       0.039514-0.13548i 
-     0.0020902-0.029397i       0.023016-0.10522i 
-     0.0013884-0.022636i       0.014976-0.085579i
-     0.0010084-0.01793i        0.010496-0.071969i
-    0.00078126-0.014395i      0.0077538-0.062031i
-    0.00063625-0.011586i       0.005958-0.054473i
-     0.0005396-0.0092499i     0.0047193-0.048541i
-    0.00047362-0.0072338i     0.0038294-0.043765i
-    0.00042844-0.0054369i      0.003169-0.039839i
-    0.00039827-0.0037889i     0.0026655-0.036556i
-    0.00037972-0.0022373i      0.002273-0.03377i 
-    0.00037087-0.00073993i    0.0019611-0.031377i
+<span class="keyword">end</span>
 
 
-T5 =
+</pre><h2 id="2">Punto 2</h2><pre class="language-matlab">
+syms <span class="string">t</span>
+<span class="comment">%Funciontransfer( [2,3,1],[3,1]);</span>
+<span class="comment">%R_impulso( [2,3,1],[3,1]);</span>
+<span class="comment">%laplace2015a([2 3 1],[0],[3,1],[0],heaviside(t),10)</span>
+<span class="comment">%R_entrada0([2 3 1],[3 1],[1 2],[0 0])</span>
+<span class="comment">%R_estado0([2 3 1],[3 1],cos(t)*heaviside(t))</span>
+R_total([2 3 1],[3 1],[1 2],[0 0],cos(t)*heaviside(t))
 
-  15&times;1 table
+</pre><h2 id="3">Punto 3</h2><pre class="language-matlab">
+<span class="keyword">function</span> [ R_0 ] = R_entrada0( a,b,ciy,cix)
+<span class="comment">% a coeficientes de las derivadas de la salida menor a mayor [a_0, ..., a_n]</span>
+<span class="comment">% b coeficientes de las derivadas de la entrada menor a mayor [b_0, ..., b_m]</span>
+<span class="comment">% ciy condiciones iniciales de la salida de  menor a mayor [y(0), y(0)^(n-1)]</span>
+<span class="comment">% cix condiciones iniciales de la entrada de menor a meyor [x(0), x^(m-1)(0)]</span>
+<span class="comment">% xi funci&oacute;n de entrada en terminos de la variable simbolica t previamente</span>
+<span class="comment">% declarada en el command window</span>
+<span class="comment">% t0 tiempo final para graficar la solucion, la derivada, y la segunda </span>
+<span class="comment">% derivada </span>
+<span class="comment">% ejemplo: resolver y^(3)+y^(2)+2y^(1)+2y=3x^(2)-x^(1)+2x con y^(2)(0)=1 y^(1)=3</span>
+<span class="comment">% y(0)=2, x(0)=0 x^(1)=1, x(t)=exp(-t)cos(t)u(t), para 10 segundos, se resuleve como</span>
+<span class="comment">% syms t</span>
+<span class="comment">% laplace2016a([2 2 1 1],[2 -1 3],[2 3 1],[0 1],exp(-t)*cos(t)*heaviside(t),10)</span>
+close <span class="string">all</span>
+tam=size(a);
+tami=size(b);
+syms <span class="string">y(t)</span> <span class="string">Y(s)</span> <span class="string">x(t)</span> <span class="string">X(s)</span> <span class="string">Yy</span> <span class="string">fp</span>;
+syms <span class="string">edd</span> <span class="string">edi</span> 
+edd=0;
+edi=0;
 
-    Diferencia
-    __________
+<span class="keyword">for</span> i=1:tam(2)
+   edd=edd+a(i)*s^(i-1)*Y(s);
+   <span class="keyword">for</span> k=1:i-1
+       edd=edd-a(i)*(s^(i-1-k)*ciy(k));
+   <span class="keyword">end</span>
+<span class="keyword">end</span>
 
-    0.00040281
-       0.23011
-       0.14394
-       0.10178
-      0.078653
-      0.064393
-      0.054866
-      0.048143
-      0.043216
-      0.039513
-      0.036685
-      0.034511
-      0.032845
-       0.03159
-      0.030679
+<span class="keyword">for</span> i=1:tami(2)
+   edi=edi+b(i)*s^(i-1)*X(s);
+   <span class="keyword">for</span> k=1:i-1
+       edi=edi-b(i)*(s^(i-1-k)*cix(k));
+   <span class="keyword">end</span>
+<span class="keyword">end</span>
+edd;
+edi;
 
-</pre><img vspace="5" hspace="5" src="p05_05.png" alt=""> <h2 id="11">&Aacute;pendice</h2><p><a href="http://www.ehu.eus/pegonzalez/I.Teleco/Apuntes/tema6.pdf">Documento</a></p><p>Introducci&oacute;n a la teor&iacute;a y sistemas de comunicaci&oacute;n /   / Lathi, B. P. ; Mexico : Limusa, 1997, 2001, 2005, 2007. 409 p.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+<span class="comment">%mensaje('APLICAMOS TRANSFORMADA DE LAPLACE y subtituimos condiciones iniciales')</span>
+
+pretty(edd);
+disp(<span class="string">'='</span>)
+pretty(edi);
+
+
+<span class="comment">%mensaje('DESPEJAMOS Y(s)')</span>
+
+edd=collect(edd,Y(s));
+edd=subs(edd,Y(s),Yy);
+edi=subs(edi,X(s),0);
+eq1=edd==edi;
+disp(<span class="string">'Y(s)='</span>);
+edd=solve(eq1, Yy);
+pretty(edd);
+
+R_0 = ilaplace(edd)
+
+title(<span class="string">'Respuesta Entrada 0'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,16)
+ezplot(R_0)
+xlabel(<span class="string">'tiempo'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,16)
+grid <span class="string">on</span>
+<span class="keyword">end</span>
+
+
+</pre><h2 id="4">Punto 4</h2><pre class="language-matlab">
+<span class="keyword">function</span> [ R_Estado_0 ] = R_estado0( a,b,xi )
+close <span class="string">all</span>
+tam=size(a);
+tami=size(b);
+syms <span class="string">y(t)</span> <span class="string">Y(s)</span> <span class="string">x(t)</span> <span class="string">X(s)</span> <span class="string">Yy</span> <span class="string">fp</span>;
+syms <span class="string">edd</span> <span class="string">edi</span> 
+edd=0;
+edi=0;
+
+<span class="keyword">for</span> i=1:tam(2)
+   edd=edd+a(i)*s^(i-1);
+<span class="keyword">end</span>
+
+<span class="keyword">for</span> i=1:tami(2)
+   edi=edi+b(i)*s^(i-1);
+<span class="keyword">end</span>
+Ft = edi/edd;
+
+R_imp = Ft*laplace(xi);
+R_Estado_0 = ilaplace(R_imp)
+
+title(<span class="string">'Respuesta Estado 0'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,16)
+ezplot(R_Estado_0)
+xlabel(<span class="string">'tiempo'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,16)
+grid <span class="string">on</span>
+<span class="keyword">end</span>
+
+
+
+
+
+
+</pre><h2 id="5">Punto 5</h2><pre class="language-matlab">
+<span class="keyword">function</span> [ R_imp ] = R_impulso( a,b )
+
+close <span class="string">all</span>
+tam=size(a);
+tami=size(b);
+syms <span class="string">y(t)</span> <span class="string">Y(s)</span> <span class="string">x(t)</span> <span class="string">X(s)</span> <span class="string">Yy</span> <span class="string">fp</span>;
+syms <span class="string">edd</span> <span class="string">edi</span> 
+edd=0;
+edi=0;
+
+<span class="keyword">for</span> i=1:tam(2)
+   edd=edd+a(i)*s^(i-1);
+<span class="keyword">end</span>
+
+<span class="keyword">for</span> i=1:tami(2)
+   edi=edi+b(i)*s^(i-1);
+<span class="keyword">end</span>
+Ft = edi/edd;
+
+R_imp = ilaplace(Ft)
+
+hold <span class="string">on</span>
+title(<span class="string">'Respuesta al impulso'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,16)
+ezplot(R_imp)
+xlabel(<span class="string">'tiempo'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,16)
+grid <span class="string">on</span>
+<span class="keyword">end</span>
+
+
+</pre><h2 id="6">Punto 6</h2><pre class="language-matlab">
+<span class="keyword">function</span> [ R_T ] = R_total( a,b,ciy,cix,xi )
+RE = R_estado0( a,b,xi );
+REE = R_entrada0( a,b,ciy,cix);
+R_T = RE + REE
+
+title(<span class="string">'Respuesta Total'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,16)
+ezplot(R_T)
+xlabel(<span class="string">'tiempo'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,16)
+grid <span class="string">on</span>
+<span class="keyword">end</span>
+
+
+</pre><h2 id="7">Punto 7</h2><pre class="language-matlab">
+syms <span class="string">t</span>;
+a=R_impulso([2 2 1],[2 1],[1 1],[0],exp(-t).*heaviside(t));
+b=R_entrada0([2 2 1],[0 1]);
+c=R_estado0([2 2 1],[2 1],exp(-t).*heaviside(t));
+d=R_total([2 2 1],[2 1],[0 1],exp(-t).*heaviside(t));
+
+s=tf(<span class="string">'s'</span>);
+g=(2*s^4+12*s^3+21*s^2+21*s+12)/(s^5+3*s^4+6*s^3+8*s^2+8*s+4);
+t=0:0.01:10;
+
+subplot(3,2,1)
+fplot(a,[0, 5],<span class="string">'b'</span>,<span class="string">'LineWidth'</span>,2); grid <span class="string">on</span>;
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta al Impulso'</span>)
+subplot(3,2,2)
+fplot(b,[0, 5],<span class="string">'r'</span>,<span class="string">'LineWidth'</span>,2); grid <span class="string">on</span>;
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta a entrada cero'</span>)
+subplot(3,2,3)
+fplot(c,[0, 5],<span class="string">'y'</span>,<span class="string">'LineWidth'</span>,2); grid <span class="string">on</span>;
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta a estado cero'</span>)
+subplot(3,2,4)
+fplot(d,[0, 5],<span class="string">'g'</span>,<span class="string">'LineWidth'</span>,2); grid <span class="string">on</span>;
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta total'</span>)
+subplot(3,2,[5 6])
+step(g,t); grid <span class="string">on</span>;
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta al escalon con condiciones iniciales 0'</span>)
+
+</pre><h2 id="8">Punto 8</h2><pre class="language-matlab">
+<span class="keyword">function</span> [Z1] = problema8(a,b,ciy,cix,xi)
+close <span class="string">all</span>
+tam=size(a);
+tami=size(b);
+syms <span class="string">y(n)</span> <span class="string">n</span> <span class="string">z</span> <span class="string">Y(z)</span> <span class="string">x(n)</span> <span class="string">X(z)</span> <span class="string">Yy</span> <span class="string">fp</span>;
+syms <span class="string">edd</span> <span class="string">edi</span>
+edd=0;
+edi=0;
+
+<span class="keyword">for</span> i=1:tam(2)
+   yd(i)=y(n+tam(2)-i);
+   edd=edd+ a(i)*ztrans(yd(i));   
+<span class="keyword">end</span>
+
+<span class="keyword">for</span> i=1:tami(2)
+   xd(i)=x(n+tami(2)-i);
+   edi=edi+ b(i)*ztrans(xd(i));   
+<span class="keyword">end</span>
+
+edd=subs(edd,ztrans(y(n),n,z), Y(z));
+edi=subs(edi,ztrans(x(n),n,z), X(z));
+
+<span class="keyword">for</span> j=1:tami(2)-1
+edi=subs(edi,x(tami(2)-1-j),cix(j));
+<span class="keyword">end</span>
+
+<span class="keyword">for</span> j=1:tam(2)-1
+edd=subs(edd,y(tam(2)-1-j),ciy(j));
+<span class="keyword">end</span>
+
+edi=subs(edi,X(z), ztrans(xi));
+edd=collect(edd,Y(z));
+edd=subs(edd,Y(z),Yy);
+eq1=edd==edi;
+edd=solve(eq1, Yy);
+Y2=partfrac(edd);
+X2=ztrans(xi);
+Z1=simplify(Y2/X2);
+
+<span class="keyword">end</span>
+
+</pre><h2 id="9">Punto 9</h2><pre class="language-matlab">
+<span class="keyword">function</span> [Z2] = punto9(a,b,ciy,cix,xi)
+syms  <span class="string">Z1</span> <span class="string">n</span>;
+Z1=problema8(a,b,ciy,cix,xi);
+Z2= iztrans(Z1);
+
+
+tiempo=0:1:10;
+stem(tiempo,subs(Z2,n,tiempo),<span class="string">'b'</span>,<span class="string">'LineWidth'</span>,2)
+title(<span class="string">'Respuesta al Impulso '</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,16)
+grid <span class="string">on</span>
+<span class="keyword">end</span>
+
+</pre><h2 id="10">Punto 10</h2><pre class="language-matlab">
+<span class="keyword">function</span> [Respuesta_Entrada0] = R_entrada0Dis(a,ciy)
+close <span class="string">all</span>
+tam=size(a);
+syms <span class="string">y(n)</span> <span class="string">n</span> <span class="string">Y(z)</span> <span class="string">Yy</span>;
+syms <span class="string">edd</span>;
+edd=0;
+
+<span class="keyword">for</span> i=1:tam(2)
+   yd(i)=y(n+tam(2)-i);
+   edd=edd+ a(i)*ztrans(yd(i));   
+<span class="keyword">end</span>
+
+edd=subs(edd,ztrans(y(n),n,z), Y(z));
+
+<span class="keyword">for</span> j=1:tam(2)-1
+edd=subs(edd,y(tam(2)-1-j),ciy(j));
+<span class="keyword">end</span>
+
+edd=collect(edd,Y(z));
+edd=subs(edd,Y(z),Yy);
+eq1=edd==0;
+edd=solve(eq1, Yy);
+Respuesta_Entrada0=simplify(iztrans(edd));
+
+<span class="comment">% figure (1)</span>
+<span class="comment">% hFig = figure(1);</span>
+<span class="comment">% set(hFig, 'Position', [0 0 900 900])</span>
+<span class="comment">% axes1 = axes('Parent',hFig,'FontWeight','bold','FontSize',16);</span>
+tiempo=0:1:10;
+stem(tiempo,subs(Respuesta_Entrada0,n,tiempo),<span class="string">'b'</span>,<span class="string">'LineWidth'</span>,2)
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta a entrada cero'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,16)
+
+<span class="keyword">end</span>
+
+</pre><h2 id="11">Punto 11</h2><pre class="language-matlab">
+<span class="keyword">function</span> [Respuesta_Estado0] = R_estado0Dis(a,b,xi)
+close <span class="string">all</span>
+tam=size(a);
+tami=size(b);
+syms <span class="string">y(n)</span> <span class="string">n</span> <span class="string">z</span> <span class="string">Y(z)</span> <span class="string">x(n)</span> <span class="string">X(z)</span> <span class="string">Yy</span> <span class="string">fp</span>;
+syms <span class="string">edd</span> <span class="string">edi</span>
+edd=0;
+edi=0;
+ciy=[0 0];
+cix=[0];
+
+<span class="keyword">for</span> i=1:tam(2)
+   yd(i)=y(n+tam(2)-i);
+   edd=edd+ a(i)*ztrans(yd(i));   
+<span class="keyword">end</span>
+
+
+<span class="keyword">for</span> i=1:tami(2)
+   xd(i)=x(n+tami(2)-i);
+   edi=edi+ b(i)*ztrans(xd(i));   
+<span class="keyword">end</span>
+
+
+edd=subs(edd,ztrans(y(n),n,z), Y(z));
+edi=subs(edi,ztrans(x(n),n,z), X(z));
+
+<span class="keyword">for</span> j=1:tami(2)-1
+edi=subs(edi,x(tami(2)-1-j),cix(j));
+<span class="keyword">end</span>
+
+<span class="keyword">for</span> j=1:tam(2)-1
+edd=subs(edd,y(tam(2)-1-j),ciy(j));
+<span class="keyword">end</span>
+
+edi=subs(edi,X(z), ztrans(xi));
+edd=collect(edd,Y(z));
+edd=subs(edd,Y(z),Yy);
+eq1=edd==edi;
+edd=solve(eq1, Yy);
+h=partfrac(edd);
+Respuesta_Estado0=iztrans(h);
+
+
+
+<span class="comment">% figure (1)</span>
+<span class="comment">% hFig = figure(1);</span>
+<span class="comment">% set(hFig, 'Position', [0 0 900 900])</span>
+<span class="comment">% axes1 = axes('Parent',hFig,'FontWeight','bold','FontSize',16);</span>
+tiempo=0:1:10;
+stem(tiempo,subs(Respuesta_Estado0,n,tiempo),<span class="string">'b'</span>,<span class="string">'LineWidth'</span>,2)
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta a estado cero'</span>)
+
+<span class="keyword">end</span>
+
+</pre><h2 id="12">Punto 12</h2><p><img src="P06_eq11938853752536249726.png" alt="$$\ddot{y}(t)+7\dot{y}(t)+10y(t)=u(t),\;\;y(0)=0,\;y'(0)=0$$" style="width:310px;height:16px;"></p><h2 id="13">Punto 13</h2><pre class="language-matlab">
+clc
+clear <span class="string">all</span>
+close <span class="string">all</span>
+
+N=[12 22 -31 1];
+D=[-12 2  8  2];
+[Nz,Dz]=c2dm(N,D,1,<span class="string">'zoh'</span>);
+y=dstep(Nz,Dz);
+plot(y,<span class="string">'.'</span>)
+grid <span class="string">on</span>;
+
+</pre><h2 id="14">Punto 14</h2><pre class="language-matlab">
+syms <span class="string">n</span>;
+tiempo=0:1:10;
+
+a=punto9([6 5 1],[1 1],[2 1],[0.5],heaviside(n));
+b=punto10([6 5 1],[2 0]);
+c=punto11([6 5 1],[1 1],heaviside(n));
+d=punto12([6 5 1],[1 1],[2 0],heaviside(n));
+
+N=[12 22 -31 1];
+D=[-12 2  8  2];
+[Nz,Dz]=c2dm(N,D,1,<span class="string">'zoh'</span>);
+y=dstep(Nz,Dz);
+
+
+subplot(3,2,1)
+stem(tiempo,subs(a,n,tiempo),<span class="string">'b'</span>,<span class="string">'LineWidth'</span>,2); grid <span class="string">on</span>;
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta al Impulso'</span>)
+subplot(3,2,2)
+stem(tiempo,subs(b,n,tiempo),<span class="string">'r'</span>,<span class="string">'LineWidth'</span>,2); grid <span class="string">on</span>;
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta a entrada cero'</span>)
+subplot(3,2,3)
+stem(tiempo,subs(c,n,tiempo),<span class="string">'y'</span>,<span class="string">'LineWidth'</span>,2); grid <span class="string">on</span>;
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta a estado cero'</span>)
+subplot(3,2,4)
+stem(tiempo,subs(d,n,tiempo),<span class="string">'g'</span>,<span class="string">'LineWidth'</span>,2); grid <span class="string">on</span>;
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta total'</span>)
+subplot(3,2,[5 6])
+plot(y,<span class="string">'.'</span>); grid <span class="string">on</span>;
+xlabel(<span class="string">'tiempo'</span>)
+title(<span class="string">'Respuesta al escalon con condiciones iniciales 0'</span>)
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Práctica 5: Series de Fourier en tiempo continuo
+%% Práctica 6:  Sistemas diferenciales y en diferencias
+% Arellano Sanchez Jose Alberto 
 %
-% Arellano Sánches José Alberto
-%
-% López Piedracruz Marcos Antonio
+% Lopez Piedracruz Marcos Antonio
 %
 % Luviano Murakawa Tsuioshi Alberto
-%
-% Robles Cernas Carlos de Jesus
-
-%% Introducción
-%
-% Existen dos formas por las cuales podemos aproximar funciones,
-% 'aproximacion discreta' y 'aproximacion continua'.
-%
-% La aproximación discreta y la interpolacion de funciones son conceptos
-% cercanos pero en el primer polinomio no existe aproximación o diferencia
-% del segundo que la funcion aproximante verifique exactamente los datos
-% discretoas del problema.
-%
-% Para poder aproximar númericamente un resultado de una señal utilizamos
-% la trasnformada de Fourire discreta. La cual utiliza muestras de una
-% señal periodica x(t) en un periodo. Donde el periodo es de T segundos.
-% Poe lo tanto existe $N_0=T_0/T$ números de muestra en el periodo. Para
-% esto consideramos:
-%
-% <<imagen1.png>>
-%
-% Donde $x(kT)$ es una muestra de x(t)
-%
-% <<imagen2.png>>
-%
-% En la practica es imposible hacer que $TREPLACE_WITH_DASH_DASH>0$. Pero podemos hacer T muy
-% pequeña pero no cero, lo que hace que los datos crezcan sin limite
-% alguno. De esta forma podemos ignorar el limite de T. Al no tomar T en
-% cero, esto generará un error, el cual es inevitable en cualquier
-% evaluacion numerica de la integral. A este error se le llama 'aliasing
-% error' y se puede denotar como:
-%
-% <<imagen3.png>> 
-%
-% De $N_0\Omega_0=2\pi$ . Asi, $e^j\Omega_0(k+N_0)=e^j/Omega_0k$ por lo
-% tanto queda como:
-%
-% <<imagen4.png>>
-%
-
-%% Ejercicio 1
-%
-d0=0.504;
-dn=@(n) 0.504/(1+4*n*j);
-t0=0;
-tf=pi;
-f=@(t) exp(-t/2);
-armo=4;
-a=-7;
-b=7;
-sfc(t0,tf,dn,d0,f,armo,a,b)
-%%
-%
-
-%% Ejercicio 2
 % 
+% Robles Cernas Carlos de Jesus
+%% Punto 1
+% 
+% <include>Funciontransfer.m</include>
 
-d0 = 0;
-A = 3;
-dn = @(n) -((8*A)/(n^2*pi^2)*sin((n*pi)/2))*j/2;
-t0 = -0.5;
-tf = 1.5;
-f = @(t) A*(2*t).*(t > -.5 & t < .5) - A*(2*(t-1)).*(t > .5 & t < 1.5);
-armo = 4;
-a = -1.5;
-b = 7;
-sfc(t0,tf,dn,d0,f,armo,a,b)
-
-%% Ejercicio 3
+ 
+%% Punto 2
 %
-d0 = 1/2;
-dn = @(n) (2/(n*pi)*sin(n*pi/2))/2;
-t0 = -pi/2;
-tf = pi/2;
-f = @(t) 1*(t > -pi/2 & t < pi/2);
-armo = 4;
-a = -pi/2;
-b = 4*pi;
-sfc(t0,tf,dn,d0,f,armo,a,b)
+% <include>Prueba_06.m</include>
+
+%% Punto 3 
+%
+% <include>R_entrada0.m</include>
+%
+%% Punto 4
+% 
+% <include>R_estado0.m</include>
+%% Punto 5
+% 
+% <include>R_impulso.m</include>
+% 
+%% Punto 6
+% 
+% <include>R_total.m</include>
+
+%% Punto 7
+%  
+% <include>punto7.m</include>
+%% Punto 8
+% 
+% <include>problema8.m</include>
+% 
+%% Punto 9
+%
+% <include>punto9.m</include>
+%% Punto 10 
+%
+% <include>punto10.m</include>
+%% Punto 11
+% <include>punto11.m</include>
+%% Punto 12
+% 
+% $$\ddot{y}(t)+7\dot{y}(t)+10y(t)=u(t),\;\;y(0)=0,\;y'(0)=0$$
+% 
+%% Punto 13
+% 
+% <include>punto13.m</include>
+
+%% Punto 14
+% 
+% <include>punto14.m</include>
 %%
-%% Ejercicio 4
-%
 
-
-
-%% Ejercicio 5
-%
-T_0=3;
-w_0=(2*pi)/T_0;
-D_n=1/T_0;
-delta= @(t) D_n*(1+2*(cos(w_0*t)+cos(2*w_0*t)+cos(3*w_0*t)+cos(4*w_0*t)+cos(5*w_0*t)));
-n=linspace(0,4,29);
-figure
-stem(n,delta(n),'k');
-xlabel('n');
-ylabel('angulo');
-
-%% Ejercicio 6
-%
-
-%% Ejercicio 7
-Ejercicio6_4 = transpose(EjC6_4());
-Metodo_trapecio = transpose(trapecio());
-Diferencia = abs(Ejercicio6_4 - Metodo_trapecio);
-T4 = table(Ejercicio6_4,Metodo_trapecio)
-T5 = table(Diferencia)
-%% Ápendice
-% <http://www.ehu.eus/pegonzalez/I.Teleco/Apuntes/tema6.pdf Documento>
-%
-% Introducción a la teoría y sistemas de comunicación /   / Lathi, B. P. ; 
-% Mexico : Limusa, 1997, 2001, 2005, 2007.
-% 409 p.
 ##### SOURCE END #####
 --></body></html>
